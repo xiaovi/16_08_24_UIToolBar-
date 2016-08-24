@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 
+#define ikconH 50
 @interface ViewController ()
 
 @end
@@ -24,7 +25,30 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark 抽出添加一行的方法
+-(UIView *)creatRowView{
 
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = [UIColor lightGrayColor];
+
+    //添加标签
+    UILabel *name = [[UILabel alloc] init];
+    name.frame = CGRectMake(0, 0, 320, ikconH);
+    name.backgroundColor = [UIColor clearColor];
+    name.text = @"赫赫";
+    name.textColor = [UIColor redColor];
+    name.textAlignment = NSTextAlignmentCenter;
+    [view addSubview:name];
+
+    UIButton *icon = [[UIButton alloc] init];
+    int randomIndex = arc4random() % 21;
+    NSString *iconName = [NSString stringWithFormat:@"m%d", randomIndex];
+    [icon setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
+    icon.frame = CGRectMake(20, 0, ikconH, ikconH);
+    [view addSubview:icon];
+
+    return view;
+}
 
 - (IBAction)add:(UIBarButtonItem *)sender {
     //0.取出最后一个子控件
@@ -32,8 +56,7 @@
     //这行的Y = 最后一个子控件的Y值+其高度, +间隔
     float oneY = last.frame.origin.y + last.frame.size.height +1;
     //1.创建新一行
-    UIView *one = [[UIView alloc] init];
-    one.backgroundColor = [UIColor lightGrayColor];
+    UIView *one = [self creatRowView];
     //2.添加到控制器的View中
     [self.view addSubview:one];
 
@@ -42,7 +65,7 @@
 
     //4.添加动画
 
-    one.frame = CGRectMake(320, oneY, 320, 50);
+    one.frame = CGRectMake(320, oneY, 320, ikconH);
     //透明度
     one.alpha = 0;
 
@@ -61,7 +84,7 @@
      */
     //如果想动画执行完毕后执行新的代码, 用以下方法:
     [UIView animateWithDuration:1.0 animations:^{
-        one.frame = CGRectMake(0, oneY, 320, 50);
+        one.frame = CGRectMake(0, oneY, 320, ikconH);
         one.alpha = 1;
     } completion:^(BOOL finished) {
         NSLog(@"移动完毕");
