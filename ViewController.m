@@ -47,8 +47,20 @@
     //考虑到一些用户会有点击了却没有反应的心理, 应该在一开始时禁用删除属性, 待控制器的View中有其他子控件时才允许点击,
     //具体操作, 在SB中修改 item的值, 将enable✔️去掉, 为了能够修改它的值, 需要获取其属性.
     UIView *last= [self.view.subviews lastObject];
+
+
     [last removeFromSuperview];
 
+    //这样做虽然可以做到在一开始显示禁用状态, 但是添加后在删除到一个不剩的时候, 仍然显示为可用状态,
+    //为了解决这个问题有以下做法:
+
+    // 判断剩下的子控件的个数, 在最后一个子控件被删除时进行判断
+    //if (self.view.subviews.count == 1){
+    //    _deleteBtn.enabled = NO;
+    //}
+    //以上代码可用简写为:
+    //剩下子控件的个数如果大于1, 则返回yes
+    _deleteBtn.enabled = (self.view.subviews.count > 1);
 
 }
 
