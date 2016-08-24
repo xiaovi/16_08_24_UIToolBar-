@@ -37,11 +37,19 @@
 
 - (IBAction)delete:(UIBarButtonItem *)sender {
     //取出最后一个子控件, 由于subview是NSArray数组, 不可变, 所以需要取出最后一个子控件.
-    UIView *last= [self.view.subviews lastObject];
+    //UIView *last= [self.view.subviews lastObject];
     //调用removeFromSuperview删除
+    //[last removeFromSuperview];
+
+
+    //但是以上做法会产生bug再没有任何子控件时点击删除, 会连同toolbar一起删除, 为防止这个问题,
+    //可以对last进行类型判断, 如果是toolBar就不要删除, 代码如下:
+    UIView *last = [self.view.subviews lastObject];
+    //isKindOfClass 判断左边的对象是不是右边这种class
+    if ([last isKindOfClass:[UIToolbar class]]) {
+        return;
+    }
     [last removeFromSuperview];
-
-
 }
 
 
