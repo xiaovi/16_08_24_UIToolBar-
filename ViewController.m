@@ -27,29 +27,29 @@
 
 
 - (IBAction)add:(UIBarButtonItem *)sender {
+    //0.取出最后一个子控件
     UIView *last = [self.view.subviews lastObject];
+    //这行的Y = 最后一个子控件的Y值+其高度, +间隔
     float oneY = last.frame.origin.y + last.frame.size.height +1;
+    //1.创建新一行
     UIView *one = [[UIView alloc] initWithFrame:CGRectMake(0, oneY, 320, 44)];
     one.backgroundColor = [UIColor lightGrayColor];
-
+    //2.添加到控制器的View中
     [self.view addSubview:one];
+
+    //3.让删除变得有效
+    _deleteBtn.enabled = YES;
 }
 
 - (IBAction)delete:(UIBarButtonItem *)sender {
-    //取出最后一个子控件, 由于subview是NSArray数组, 不可变, 所以需要取出最后一个子控件.
-    //UIView *last= [self.view.subviews lastObject];
-    //调用removeFromSuperview删除
-    //[last removeFromSuperview];
 
 
-    //但是以上做法会产生bug再没有任何子控件时点击删除, 会连同toolbar一起删除, 为防止这个问题,
-    //可以对last进行类型判断, 如果是toolBar就不要删除, 代码如下:
-    UIView *last = [self.view.subviews lastObject];
-    //isKindOfClass 判断左边的对象是不是右边这种class
-    if ([last isKindOfClass:[UIToolbar class]]) {
-        return;
-    }
+    //考虑到一些用户会有点击了却没有反应的心理, 应该在一开始时禁用删除属性, 待控制器的View中有其他子控件时才允许点击,
+    //具体操作, 在SB中修改 item的值, 将enable✔️去掉, 为了能够修改它的值, 需要获取其属性.
+    UIView *last= [self.view.subviews lastObject];
     [last removeFromSuperview];
+
+
 }
 
 

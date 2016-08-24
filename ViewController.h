@@ -13,6 +13,7 @@
 
 
 - (IBAction)delete:(UIBarButtonItem *)sender;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteBtn;
 
 @end
 
