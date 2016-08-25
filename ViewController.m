@@ -9,7 +9,11 @@
 #import "ViewController.h"
 
 #define ikconH 50
+#define kTagName 10
 @interface ViewController ()
+{
+    NSArray *_allName;
+}
 
 @end
 
@@ -17,6 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _allName = @[@"张慕明",@"喵咪咪",@"小蛋壳", @"叮叮当当", @"欢欢乐乐", @"王菲"];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -35,21 +40,41 @@
     UILabel *name = [[UILabel alloc] init];
     name.frame = CGRectMake(0, 0, 320, ikconH);
     name.backgroundColor = [UIColor clearColor];
-    name.text = @"赫赫";
+    //添加随机姓名
+    int nameIndex = arc4random() % [_allName count];
+    name.text = [NSString stringWithFormat:@"%@", _allName[nameIndex]];
+    //设置文本颜色跟居中
     name.textColor = [UIColor redColor];
     name.textAlignment = NSTextAlignmentCenter;
+    //给Label添加Tag
+    name.tag = kTagName;
+
     [view addSubview:name];
 
     UIButton *icon = [[UIButton alloc] init];
-    int randomIndex = arc4random() % 21;
+    //随机产生文件名
+    //int randomIndex = arc4random() % 21;
+    //以下方法随机产生小于括号内的整数
+    int randomIndex = arc4random_uniform(20) + 1;
     NSString *iconName = [NSString stringWithFormat:@"m%d", randomIndex];
+
     [icon setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
     icon.frame = CGRectMake(20, 0, ikconH, ikconH);
     [view addSubview:icon];
 
+    //给按钮添加监听器
+    [icon addTarget:self action:@selector(iconClick:) forControlEvents:UIControlEventTouchUpInside];
+
     return view;
 }
 
+#pragma mark 监听按钮点击
+-(void)iconClick:(UIButton *)icon
+{
+    //从icon的父控件中取出标签为10的兄弟标签, 并将其强制装换为UILabel类型
+    UILabel *label =(UILabel *) [icon.superview viewWithTag:kTagName];
+    NSLog(@"%@", label.text);
+}
 - (IBAction)add:(UIBarButtonItem *)sender {
     //0.取出最后一个子控件
     UIView *last = [self.view.subviews lastObject];
