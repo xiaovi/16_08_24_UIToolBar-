@@ -10,6 +10,7 @@
 
 #define ikconH 50
 #define kTagName 10
+#define kDuration 0.5
 @interface ViewController ()
 {
     NSArray *_allName;
@@ -51,6 +52,8 @@
 
     [view addSubview:name];
 
+
+    //生成icon 的按钮
     UIButton *icon = [[UIButton alloc] init];
     //随机产生文件名
     //int randomIndex = arc4random() % 21;
@@ -65,7 +68,59 @@
     //给按钮添加监听器
     [icon addTarget:self action:@selector(iconClick:) forControlEvents:UIControlEventTouchUpInside];
 
+
+    //给该行添加一个删除的按钮
+    //调用类方法迅速创建一个按钮
+    UIButton *delete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    //设置按钮的frame属性, title, 以及绑定删除方法
+    delete.frame = CGRectMake(250, 10, 60, 35);
+    //设置默认状态下的标题
+    [delete setTitle:@"删除" forState:UIControlStateNormal];
+    //为按钮绑定删除方法
+    [delete addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
+
+
+    [view addSubview:delete];
+
+
     return view;
+}
+#pragma mark 监听删除按钮
+-(void)deleteClick:(UIButton *)btn{
+
+    [UIView animateWithDuration:kDuration animations:^{
+        CGRect temp = btn.superview.frame;
+        temp.origin.x = self.view.frame.size.width;
+        btn.superview.frame = temp;
+        btn.superview.alpha = 0;
+    } completion:^(BOOL finished) {//动画执行完毕后
+
+        //1.获得即将删除的子控件在数组中的索引
+        //indexOfObject:返回传入的对象在数组中的索引
+        NSInteger startIndex = [self.view.subviews indexOfObject:btn.superview];
+
+        //拿到传入的按钮的父控件, 并将其从其父控件中删除
+        [btn.superview removeFromSuperview];
+        //判断垃圾桶是否可用
+        _deleteBtn.enabled = self.view.subviews.count > 1;
+
+
+        //添加删除的动画
+
+        [UIView animateWithDuration:0.2 animations:^{
+            //遍历被删除后的子控件, 将其Y值减去其高度
+            for (NSInteger i = startIndex; i < self.view.subviews.count; i++) {
+                //1.取出需要上移的子控件
+                UIView *child = self.view.subviews[i];
+                //2.创建临时frame
+                CGRect temp = child.frame;
+                temp.origin.y -= ikconH + 1;
+                child.frame = temp;
+            }
+        }];
+
+    }];
+
 }
 
 #pragma mark 监听按钮点击
@@ -108,7 +163,7 @@
     }];
      */
     //如果想动画执行完毕后执行新的代码, 用以下方法:
-    [UIView animateWithDuration:1.0 animations:^{
+    [UIView animateWithDuration:kDuration animations:^{
         one.frame = CGRectMake(0, oneY, 320, ikconH);
         one.alpha = 1;
     } completion:^(BOOL finished) {
@@ -127,7 +182,7 @@
     UIView *last= [self.view.subviews lastObject];
 
 
-    [UIView animateWithDuration:1.0 animations:^{
+    [UIView animateWithDuration:kDuration animations:^{
         CGRect temp = last.frame;
         temp.origin.x = 320;
         last.frame = temp;
