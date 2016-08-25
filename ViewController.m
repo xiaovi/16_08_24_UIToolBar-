@@ -34,56 +34,28 @@
 #pragma mark 抽出添加一行的方法
 -(UIView *)creatRowView{
 
-    UIView *view = [[UIView alloc] init];
-    view.backgroundColor = [UIColor lightGrayColor];
+    //从NSBundle中加载xib文件, 以数组形式返回objects下面所有控件
+    NSArray *allViews = [[NSBundle mainBundle] loadNibNamed:@"rowView" owner:nil options:nil];
 
-    //添加标签
-    UILabel *name = [[UILabel alloc] init];
-    name.frame = CGRectMake(0, 0, 320, ikconH);
-    name.backgroundColor = [UIColor clearColor];
-    //添加随机姓名
-    int nameIndex = arc4random() % [_allName count];
-    name.text = [NSString stringWithFormat:@"%@", _allName[nameIndex]];
-    //设置文本颜色跟居中
-    name.textColor = [UIColor redColor];
-    name.textAlignment = NSTextAlignmentCenter;
-    //给Label添加Tag
-    name.tag = kTagName;
+    //拿到所有控件中所需要的控件
+    UIView *rowView = allViews[0];
 
-    [view addSubview:name];
+    //通过viewWithTag找到相对于的子控件, 修改其图片已经状态
+    UIButton *iconButton = [rowView viewWithTag:1];
+    NSString *iconName = [NSString stringWithFormat:@"m%d.png", arc4random_uniform(21) +1];
+    [iconButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
 
+    //修改Label的内容
+    UILabel *label = [rowView viewWithTag:2];
+    label.text = _allName[arc4random_uniform((int)[_allName count])];
 
-    //生成icon 的按钮
-    UIButton *icon = [[UIButton alloc] init];
-    //随机产生文件名
-    //int randomIndex = arc4random() % 21;
-    //以下方法随机产生小于括号内的整数
-    int randomIndex = arc4random_uniform(20) + 1;
-    NSString *iconName = [NSString stringWithFormat:@"m%d", randomIndex];
-
-    [icon setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
-    icon.frame = CGRectMake(20, 0, ikconH, ikconH);
-    [view addSubview:icon];
-
-    //给按钮添加监听器
-    [icon addTarget:self action:@selector(iconClick:) forControlEvents:UIControlEventTouchUpInside];
-
-
-    //给该行添加一个删除的按钮
-    //调用类方法迅速创建一个按钮
-    UIButton *delete = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //设置按钮的frame属性, title, 以及绑定删除方法
-    delete.frame = CGRectMake(250, 10, 60, 35);
-    //设置默认状态下的标题
-    [delete setTitle:@"删除" forState:UIControlStateNormal];
-    //为按钮绑定删除方法
+    //修改delete按钮, 并绑定监听器
+    UIButton *delete = [rowView viewWithTag:3];
     [delete addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
 
+    return rowView;
 
-    [view addSubview:delete];
 
-
-    return view;
 }
 #pragma mark 监听删除按钮
 -(void)deleteClick:(UIButton *)btn{
