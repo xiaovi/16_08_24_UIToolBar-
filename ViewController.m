@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "rowView.h"
 
 #define ikconH 50
 #define kTagName 10
@@ -32,27 +33,20 @@
     // Dispose of any resources that can be recreated.
 }
 #pragma mark 抽出添加一行的方法
--(UIView *)creatRowView{
+-(UIView *)creatRowView
+{
+    NSString *iconName = [NSString stringWithFormat:@"m%d", arc4random_uniform(20) +1];
+    
+    rowView *view = [rowView rowViewWithIconName:iconName name:_allName[arc4random() % _allName.count]];
 
-    //从NSBundle中加载xib文件, 以数组形式返回objects下面所有控件
-    NSArray *allViews = [[NSBundle mainBundle] loadNibNamed:@"rowView" owner:nil options:nil];
+    /*尝试增加删除一行功能, 失败.
+    rowView *View = [[NSBundle mainBundle] loadNibNamed:@"rowView" owner:nil options:nil][0];
+    UIButton *delete = [View viewWithTag:3];
 
-    //拿到所有控件中所需要的控件
-    UIView *rowView = allViews[0];
-
-    //通过viewWithTag找到相对于的子控件, 修改其图片已经状态
-    UIButton *iconButton = [rowView viewWithTag:1];
-    NSString *iconName = [NSString stringWithFormat:@"m%d.png", arc4random_uniform(21) +1];
-    [iconButton setImage:[UIImage imageNamed:iconName] forState:UIControlStateNormal];
-
-    //修改Label的内容
-    UILabel *label = [rowView viewWithTag:2];
-    label.text = _allName[arc4random_uniform((int)[_allName count])];
-
-    //修改delete按钮, 并绑定监听器
-
-
-    return rowView;
+    [delete addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:delete];
+     */
+    return view;
 
 
 }
