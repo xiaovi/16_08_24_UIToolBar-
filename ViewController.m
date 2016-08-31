@@ -50,8 +50,7 @@
     label.text = _allName[arc4random_uniform((int)[_allName count])];
 
     //修改delete按钮, 并绑定监听器
-    UIButton *delete = [rowView viewWithTag:3];
-    [delete addTarget:self action:@selector(deleteClick:) forControlEvents:UIControlEventTouchUpInside];
+
 
     return rowView;
 
@@ -145,6 +144,8 @@
 
     //[UIView commitAnimations];
 }
+
+
 
 - (IBAction)delete:(UIBarButtonItem *)sender {
 

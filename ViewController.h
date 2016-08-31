@@ -11,7 +11,7 @@
 @interface ViewController : UIViewController
 - (IBAction)add:(UIBarButtonItem *)sender;
 
-
+-(IBAction)deleteClick:(UIButton *)btn;
 - (IBAction)delete:(UIBarButtonItem *)sender;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *deleteBtn;
 
